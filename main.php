@@ -1,97 +1,78 @@
 <?php
-class Cow {
+class Animal{
     private $id;
-    function __construct() {
-        $this->id = uniqid("cow");
+    function __construct($type) {
+        $this->id = uniqid($type);
     }
     public function getId() {
         return $this->id;
     }
-    public function getMilk(){
+}
+class Cow extends Animal{
+    public function getRes(){
         return rand(8, 12);
     }
 }
-class Chicken {
-    private $id;
-    function __construct() {
-        $this->id = uniqid("chicken");
-    }
-    public function getId() {
-        return $this->id;
-    }
-    public function getEgg(){
+class Chicken extends Animal{
+    public function getRes(){
         return rand(0, 1);
     }
 }
 class Farm {
-    public $cows = array();
-    public $chickens = array();
-    public function addCows($count1){
-        $currentcows = count($this->cows);
-        for($i=$currentcows;$i<($currentcows+$count1);$i++){
-            $this->cows[$i] = new Cow();
+    public function AddAnimals($count1, $type){
+        $currentanimals = count($this->$type);
+        for($i=$currentanimals;$i<($currentanimals+$count1);$i++){
+            $this->$type[$i] = new $type("$type");
         }
     }
-    public function getCows() {
-        return $this->cows;
+    public function getAnimals($type){
+        return $this->$type;
     }
-    public function addChicken($count2){
-        $currentchicken = count($this->chickens);
-        for($i=$currentchicken;$i<($currentchicken+$count2);$i++){
-            $this->chickens[$i] = new Chicken();
+    public function takeAllResurs($type){
+        $currentResurs = 0;
+        for($i=0;$i<count($this->$type);$i++){
+            $currentResurs += $this->$type[$i]->getRes();
         }
+        return $currentResurs;
     }
-    public function getChickens() {
-        return $this->chickens;
-    }
-    public function takeAllEggs() {
-        $currentEggs = 0;
-        for($i=0;$i<count($this->chickens);$i++){
-            $currentEggs += $this->chickens[$i]->getEgg();
-        }
-        return $currentEggs;
-    }
-    public function takeAllMilk() {
-        $currentMilk = 0;
-        for($i=0;$i<count($this->cows);$i++){
-            $currentMilk += $this->cows[$i]->getMilk();
-        }
-        return $currentMilk;
-    }
-    public function takeAllResurs($n){
-        $countMilk = 0;
-        $countEggs = 0;
+    public function takeResurs($n,$type){
+        $countResurs = 0;
         for ($i=0; $i<$n; $i++) {
-            $countMilk += $this->takeAllMilk();
-            $countEggs += $this->takeAllEggs();
+            $countResurs += $this->takeAllResurs($type);
         }
-        return '<ul><li>'.$countMilk . ' - Литров молока '.'</li>'. '<li>'.$countEggs . ' - Яиц '.'</li></ul>';
+        return $countResurs;
     }
 }
 $farm1 = new Farm();
-$farm1->addCows(10);
-$farm1->addChicken(20);
+$farm1->addAnimals(10, 'cow');
+$farm1->addAnimals(20, 'chicken');
 
 echo "<b>Количество скота на ферме:</b>";
 echo "<ul>";
-echo "<li>Коров: ".count($farm1->getCows())."</li>";
-echo "<li>Кур: ".count($farm1->getChickens())."</li>";
+echo "<li>Коров: ".count($farm1->getAnimals('cow'))."</li>";
+echo "<li>Кур: ".count($farm1->getAnimals('chicken'))."</li>";
 echo "</ul>";
 
 echo '<b>За 7 дней с имеющимся скотом было собранно:</b>';
-echo $farm1->takeAllResurs(7);
+echo "<ul>";
+echo "<li>" . $farm1->takeResurs(7, 'cow') . ' литров молока' ."</li>";
+echo "<li>" . $farm1->takeResurs(7, 'chicken') . '  яиц' . "</li>";
+echo "</ul>";
 
-$farm1->addCows(1);
-$farm1->addChicken(5);
+
+
+$farm1->addAnimals(1, 'cow');
+$farm1->addAnimals(5, 'chicken');
 
 echo "<b>Количество скота на ферме после покупки 1 коровы и 5 кур:</b>";
 echo "<ul>";
-echo "<li>Коров: ".count($farm1->getCows())."</li>";
-echo "<li>Кур: ".count($farm1->getChickens())."</li>";
+echo "<li>Коров: ".count($farm1->getAnimals('cow'))."</li>";
+echo "<li>Кур: ".count($farm1->getAnimals('chicken'))."</li>";
 echo "</ul>";
 
 echo '<b>За 7 дней с имеющимся скотом было собранно:</b>';
-echo $farm1->takeAllResurs(7);
-
-
+echo "<ul>";
+echo "<li>" . $farm1->takeResurs(7, 'cow') . '  литров молока' . "</li>";
+echo "<li>" . $farm1->takeResurs(7, 'chicken') . '  яиц'. "</li>";
+echo "</ul>";
 ?>
