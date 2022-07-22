@@ -1,0 +1,5 @@
+class Sheep extends Animal{
+    public function getRes(){
+        return rand(5, 10);
+    }
+}
