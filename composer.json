@@ -1,0 +1,17 @@
+{
+    "name": "xgio2/Farm",
+    "description": "Helloworld",
+    "license": "top-secret",
+    "authors": [
+        {
+            "name": "GIO IMN",
+            "email": "xgio2@mail.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "script/cow": "*",
+        "script/chicken": "*",
+        "script/sheep": "*"
+    }
+}
